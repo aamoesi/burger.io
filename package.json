@@ -17,7 +17,7 @@
     "javascript",
     "mysql"
   ],
-  "author": "Damien Asseya",
+  "author": "Anthony Amoesi Ansah",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.17.2",
