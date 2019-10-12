@@ -1,29 +1,92 @@
-var connection = require('../config/connection.js');
+var connection = require("../config/connection.js");
 
-// Inside the `orm.js` file create the code that will execute MySQL commands
 
-//create, read, update, delete
-var orm = {
-  insert: function(some_tbl, some_col, some_val, cb){
-    connection.query('INSERT INTO ' + some_tbl + ' ( ' + some_col + ' ) ' + ' VALUES (?)', [some_val], function(err, result){
-      cb(result);
-    });
-  },
-  read: function(some_tbl, cb){
-    connection.query('SELECT *  FROM ' + some_tbl + ';', function(err, result){
-      cb(result);
-    });
-  },
-  update: function(some_tbl, some_set_col, some_set_val, some_col_param, some_val_param, cb){
-    connection.query('UPDATE ' + some_tbl + ' SET ' + some_set_col + ' = ? WHERE ' + some_col_param + ' = ?', [some_set_val, some_val_param], function(err, result){
-      cb(result);
-    });
-  },
-  delete: function(some_tbl, some_col, some_val, cb){
-    connection.query('DELETE FROM ' + some_tbl + ' WHERE ' + some_col + ' = ?',[some_val], function(err, result){
-      cb(result);
-    });
+function printQuestionMarks(num) {
+    var arr = [];
+  
+    for (var i = 0; i < num; i++) {
+      arr.push("?");
+    }
+  
+    return arr.toString();
   }
-}//end of object
 
-module.exports = orm;
+  function objToSql(ob) {
+    var arr = [];
+    for (var key in ob) {
+        var value = ob[key];
+        if (Object.hasOwnProperty.call(ob, key)) {
+            if (typeof value === "string" && value.indexOf(" ") >= 0) {
+                value = "'" + value + "'";
+              }
+              arr.push(key + "=" + value);
+    }
+  }
+  return arr.toString();
+}
+
+var orm = {
+    all: function(tableInput, cb) {
+      var queryString = "SELECT * FROM " + tableInput + ";";
+      connection.query(queryString, function(err, result) {
+        if (err) {
+          throw err;
+        }
+        cb(result);
+      });
+    },
+    create: function(table, cols, vals, cb) {
+      var queryString = "INSERT INTO " + table;
+  
+      queryString += " (";
+      queryString += cols.toString();
+      queryString += ") ";
+      queryString += "VALUES (";
+      queryString += printQuestionMarks(vals.length);
+      queryString += ") ";
+  
+      console.log(queryString);
+  
+      connection.query(queryString, vals, function(err, result) {
+        if (err) {
+          throw err;
+        }
+  
+        cb(result);
+      });
+    },
+    // An example of objColVals would be {name: panther, sleepy: true}
+    update: function(table, objColVals, condition, cb) {
+      var queryString = "UPDATE " + table;
+  
+      queryString += " SET ";
+      queryString += objToSql(objColVals);
+      queryString += " WHERE ";
+      queryString += condition;
+  
+      console.log(queryString);
+      connection.query(queryString, function(err, result) {
+        if (err) {
+          throw err;
+        }
+  
+        cb(result);
+      });
+    },
+    delete: function(table, condition, cb) {
+      var queryString = "DELETE FROM " + table;
+      queryString += " WHERE ";
+      queryString += condition;
+  
+      connection.query(queryString, function(err, result) {
+        if (err) {
+          throw err;
+        }
+  
+        cb(result);
+      });
+    }
+  };
+  
+  // Export the orm object for the model (cat.js).
+  module.exports = orm;
