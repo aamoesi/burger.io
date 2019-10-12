@@ -1,24 +1,4 @@
-INSERT INTO burgers
-    (name)
-VALUES
-    ("Do Brussel Burger");
-INSERT INTO burgers
-    (name)
-VALUES
-    ("Burger a la Mode");
-INSERT INTO burgers
-    (name)
-VALUES
-    ("Ruta-Bag-A Burger");
-INSERT INTO burgers
-    (name)
-VALUES
-    ("The Cauliflower's Cumin From Inside the House Burger");
-INSERT INTO burgers
-    (name)
-VALUES
-    ("Gourdon-Hamsey Burger Burger");
-INSERT INTO burgers
-    (name)
-VALUES
-    ("Poutine on the Ritz Burger");
+-- Three entries to populate the new table created using schema.sql
+INSERT INTO burgers (burger_name,devoured) VALUES ('Cheeseburger with Onion',false);
+INSERT INTO burgers (burger_name,devoured) VALUES ('Turkey Burger with Pepperjack',false);
+INSERT INTO burgers (burger_name,devoured) VALUES ('Falafel Burger',false);

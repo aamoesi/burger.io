@@ -1,92 +1,37 @@
-var connection = require("../config/connection.js");
-
-
-function printQuestionMarks(num) {
-    var arr = [];
-  
-    for (var i = 0; i < num; i++) {
-      arr.push("?");
-    }
-  
-    return arr.toString();
-  }
-
-  function objToSql(ob) {
-    var arr = [];
-    for (var key in ob) {
-        var value = ob[key];
-        if (Object.hasOwnProperty.call(ob, key)) {
-            if (typeof value === "string" && value.indexOf(" ") >= 0) {
-                value = "'" + value + "'";
-              }
-              arr.push(key + "=" + value);
-    }
-  }
-  return arr.toString();
-}
+var connection = require('./connection.js');
 
 var orm = {
-    all: function(tableInput, cb) {
-      var queryString = "SELECT * FROM " + tableInput + ";";
-      connection.query(queryString, function(err, result) {
-        if (err) {
-          throw err;
-        }
+
+  selectAll: function(tableName, cb) {
+    var queryString = "SELECT * FROM ??";
+    connection.query(queryString, [tableName], function(err, result) {
+      if (err) {
+        console.log(err);
+      } else {
         cb(result);
-      });
-    },
-    create: function(table, cols, vals, cb) {
-      var queryString = "INSERT INTO " + table;
-  
-      queryString += " (";
-      queryString += cols.toString();
-      queryString += ") ";
-      queryString += "VALUES (";
-      queryString += printQuestionMarks(vals.length);
-      queryString += ") ";
-  
-      console.log(queryString);
-  
-      connection.query(queryString, vals, function(err, result) {
-        if (err) {
-          throw err;
-        }
-  
+      }
+    })
+  },
+  insertOne: function(tableName, column, value, cb) {
+    var queryString = "INSERT INTO ?? (??) VALUES (?)";
+    connection.query(queryString, [tableName, column, value], function(err, result) {
+      if (err) {
+        console.log(err);
+      } else {
         cb(result);
-      });
-    },
-    // An example of objColVals would be {name: panther, sleepy: true}
-    update: function(table, objColVals, condition, cb) {
-      var queryString = "UPDATE " + table;
-  
-      queryString += " SET ";
-      queryString += objToSql(objColVals);
-      queryString += " WHERE ";
-      queryString += condition;
-  
-      console.log(queryString);
-      connection.query(queryString, function(err, result) {
-        if (err) {
-          throw err;
-        }
-  
+      }
+    })
+  },
+  updateOne: function(tableName, colVal, boolean, colName, condition, cb) {
+    var queryString = "UPDATE ?? SET ??=? WHERE ??=?";
+    connection.query(queryString, [tableName, colVal, boolean, colName, condition], function(err, result) {
+      if (err) {
+        console.log(err);
+      } else {
         cb(result);
-      });
-    },
-    delete: function(table, condition, cb) {
-      var queryString = "DELETE FROM " + table;
-      queryString += " WHERE ";
-      queryString += condition;
-  
-      connection.query(queryString, function(err, result) {
-        if (err) {
-          throw err;
-        }
-  
-        cb(result);
-      });
-    }
-  };
-  
-  // Export the orm object for the model (cat.js).
-  module.exports = orm;
+      }
+    })
+  }
+}
+
+module.exports = orm;

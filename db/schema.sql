@@ -1,13 +1,13 @@
-CREATE DATABASE burger_db;
-USE burger_db;
+-- Database Schema
+CREATE DATABASE burgers_db;
+USE burgers_db;
 
+-- Create tables and fields
 CREATE TABLE burgers
 (
-    id int NOT NULL
-    AUTO_INCREMENT,
-    name varchar
-    (255) NOT NULL,
-    eaten BOOLEAN DEFAULT false,
-    PRIMARY KEY
-    (id)
+id INT AUTO_INCREMENT NOT NULL,
+burger_name VARCHAR(255) NOT NULL,
+devoured BOOLEAN NOT NULL DEFAULT 0,
+date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+PRIMARY KEY (id)
 );
