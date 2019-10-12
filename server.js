@@ -3,7 +3,7 @@ var bodyParser = require("body-parser");
 var methodOverride = require("method-override");
 var exphbs = require("express-handlebars");
 var app = express();
-var PORT = process.env.PORT || 7800;
+var PORT = process.env.PORT || 3000;
 
 // Serve static content for the app from the "public" directory in the application directory.
 app.use(express.static(process.cwd() + "/public"));
@@ -22,6 +22,6 @@ app.set("view engine", "handlebars");
 var routes = require('./controllers/burgers_controller.js');
 app.use('/', routes);
 
-app.listen(process.env.PORT || 7800, function(){
+app.listen(process.env.PORT || 3000, function(){
   console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
 });
